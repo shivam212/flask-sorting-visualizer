@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"> </script>
+</head>
+
+<body>
+    {% block content %}
+    <h2>{{topic}}</h2>
+
+    <div>
+	    <canvas id="line-chart" class="chartsjs" width="3" height="1" style="display:block; width:800, height:450"></canvas>
+	</div>
+
+    {% block javascript %}
+	<script>
+	labels = JSON.parse({{ labels | tojson }})
+	data = JSON.parse({{ data | tojson }})
+    arrayStates = JSON.parse({{ arrayStates | tojson }})
+    console.log(arrayStates)
+	var myLineChart = new Chart(document.getElementById("line-chart"),{
+		"type":"bar",
+		"data":
+			{"labels":labels,
+			"datasets":[{
+			"data":	data,
+            "backgroundColor" : []
+        			}]},
+		"options":{legend: { display: false }}});
+
+
+    adddata = async(arrayStates) => {
+        console.log("now")
+        for(var i=0;i<arrayStates.length;i++){
+           var x = myLineChart.data.datasets[0].data[i]
+           myLineChart.data.datasets[0].data[i] = arrayStates[i] 
+           f = []
+           if(x!=arrayStates[i])
+           {
+             myLineChart.data.datasets[0].backgroundColor[i] =  "rgba(179, 140, 255, 1)" 
+             f.push(i)
+           }
+           else
+           {
+               myLineChart.data.datasets[0].backgroundColor[i] =  "rgba(0, 255, 124, 1)"
+           }
+        }
+myLineChart.update()
+    }
+
+    const getData = async () => {
+    for(var i=0;i<arrayStates.length;i++){
+        newarr = arrayStates[i]
+        await new Promise(r => setTimeout(r, 1200));
+        adddata(newarr)
+        console.log(i)
+    }  } 
+    getData()
+    </script>
+
+    {% endblock %}
+    {% endblock %}
+
+</body>
