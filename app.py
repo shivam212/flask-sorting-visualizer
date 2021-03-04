@@ -30,16 +30,18 @@ def bubbleSort(arr):
         # print(newarr,i)
     return newlist
 listlistlist = []
-def merge_sort(array, left_index, right_index):
+def merge_sort(array, left_index, right_index, doit):
     if left_index >= right_index:
         return
 
     middle = (left_index + right_index)//2
-    merge_sort(array, left_index, middle)
-    merge_sort(array, middle + 1, right_index)
+    merge_sort(array, left_index, middle,doit)
+    merge_sort(array, middle + 1, right_index,doit)
     merge(array, left_index, right_index, middle)
     # print(array)
-    listlistlist.append(array.copy())
+    doit.append(array.copy())
+
+    return doit
 
 
 def merge(array, left_index, right_index, middle):
@@ -89,10 +91,34 @@ def dosort():
     if request.method == "POST":
           arr = []
           dataArr = request.data.decode('utf-8') 
-          for s in dataArr:
-              if s!=" ":
-                arr.append(int(s))
-          return jsonify({'array': bubbleSort(arr.copy())})
+          str1 = ""
+          str2 = ""
+          flag=1
+          for x in dataArr:
+              if x=="x":
+                  flag=0
+                  continue
+              if flag:
+                  str1+=x
+              else:
+                str2+=x
+
+
+          temp = ""
+          for s in str1:
+              if s==" ":
+                arr.append(int(temp))
+                temp=""
+              else:
+                  temp+=s
+          arr.append(int(temp)) 
+          print(str1,str2)
+          if str2=="bubble sort":
+            return jsonify({'array': bubbleSort(arr.copy())})
+          else:
+            doit = []
+            return jsonify({'array': merge_sort(arr.copy(),0,len(arr)-1,doit)})
+
 @app.route('/')
 def index():
     # for array in arrayStates:
@@ -100,7 +126,6 @@ def index():
     # print(arrayStates)
     # array = [7,6,5,58,324,0,1,2,3,4,5,6,7,9,82]  
     array = [10,9,8,7,6,5,4,3,2,1,10,9,8,7,6,5,4,3,2,1,7,6,5,58,34,0,1,2,3,4,5,6,7,9,8]
-    merge_sort(array.copy(), 0, len(array)-1)
     arrayStates = listlistlist
     arrayStates = json.dumps(arrayStates)
     data = json.dumps(array)

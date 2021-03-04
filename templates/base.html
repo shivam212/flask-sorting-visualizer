@@ -7,8 +7,16 @@
     <div>
         <h1>Sorting Visualiser</h1>
         <h2>Enter your array seperated by spaces and click on (Show me) to visualise!</h2>
+        <h3>Please reset after each use, has some bugs still</h3>
+       <select name="sorter" id="sorter">
+  <option value="bubble sort">bubble sort</option>
+  <option value="selection sort">selection sort</option>
+</select> 
+</div>
          <input type="text" id="lname" name="lname">
         <button type="button" >Show me!!!!!!!</button>
+
+        <a href="{{ url_for('index') }}">Reset</a>
 	    <canvas id="line-chart" class="chartsjs" width="3" height="1" style="display:block; width:800, height:450"></canvas>
 	</div>
 
@@ -21,12 +29,15 @@
         var x = {"hello":"hello"};
     $("button").click(function translate() {
         var textboxvalue = $('input[id="lname"]').val();
+        var sor = $( "#sorter option:selected" ).text()
         console.log(textboxvalue)
+        var arr = [textboxvalue,sor]
+        var send = arr.join('x')
         
         $.ajax({
   type: 'POST',
   url: "/sort",
-  data: textboxvalue, 
+  data: send, 
   contentType: 'application/json;charset=UTF-8',
   success: function(data){
       arrayStates = data['array'];
