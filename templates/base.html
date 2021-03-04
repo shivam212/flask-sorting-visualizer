@@ -1,25 +1,63 @@
-<!DOCTYPE html>
-<html>
+{% extends "bootstrap/base.html" %}
 
-<head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"> </script>
-</head>
 
-<body>
     {% block content %}
     <h2>{{topic}}</h2>
 
     <div>
+        <h1>Sorting Visualiser</h1>
+        <h2>Enter your array seperated by spaces and click on (Show me) to visualise!</h2>
+         <input type="text" id="lname" name="lname">
+        <button type="button" >Show me!!!!!!!</button>
 	    <canvas id="line-chart" class="chartsjs" width="3" height="1" style="display:block; width:800, height:450"></canvas>
 	</div>
 
     {% block javascript %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>
-	labels = JSON.parse({{ labels | tojson }})
-	data = JSON.parse({{ data | tojson }})
-    arrayStates = JSON.parse({{ arrayStates | tojson }})
+        var arrayStates;
+        var labels =[]
+        var x = {"hello":"hello"};
+    $("button").click(function translate() {
+        var textboxvalue = $('input[id="lname"]').val();
+        console.log(textboxvalue)
+        
+        $.ajax({
+  type: 'POST',
+  url: "/sort",
+  data: textboxvalue, 
+  contentType: 'application/json;charset=UTF-8',
+  success: function(data){
+      arrayStates = data['array'];
+      asyncCall(arrayStates[0].length)
+      getData();
+  }
+})
+    
+            });
+    async function asyncCall(x) {
+  // expected output: "resolved"
+  for(var i=0;i<x;i++){
+      await labels.push(i+1)
+
+  }
+
+}
     console.log(arrayStates)
-	var myLineChart = new Chart(document.getElementById("line-chart"),{
+	data = JSON.parse({{ data | tojson }})
+    // arrayStates = JSON.parse({{ arrayStates | tojson }})
+    // console.log(arrayStates)
+	// var myLineChart = new Chart(document.getElementById("line-chart"),{
+	// 	"type":"bar",
+	// 	"data":
+	// 		{"labels":labels,
+	// 		"datasets":[{
+	// 		"data":	data,
+    //         "backgroundColor" : []
+    //     			}]},
+	// 	"options":{legend: { display: false }}});
+    var chartdata = {
 		"type":"bar",
 		"data":
 			{"labels":labels,
@@ -27,7 +65,9 @@
 			"data":	data,
             "backgroundColor" : []
         			}]},
-		"options":{legend: { display: false }}});
+		"options":{legend: { display: false }}} ;
+    var LineChart = document.getElementById("line-chart");
+    var myLineChart = new Chart(LineChart,chartdata);
 
 
     adddata = async(arrayStates) => {
@@ -56,10 +96,15 @@ myLineChart.update()
         adddata(newarr)
         console.log(i)
     }  } 
-    getData()
+    // getData()
+    
+        
+        
+    
     </script>
 
     {% endblock %}
     {% endblock %}
 
-</body>
+    
+

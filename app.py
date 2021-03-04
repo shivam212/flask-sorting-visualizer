@@ -1,8 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 import json
+from flask_bootstrap import Bootstrap
 
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 
 
 # Python program for implementation of Bubble Sort 
@@ -25,7 +27,7 @@ def bubbleSort(arr):
             if newarr[j] > newarr[j+1] : 
                 newarr[j], newarr[j+1] = newarr[j+1], newarr[j] 
         newlist.append(newarr.copy())
-        print(newarr,i)
+        # print(newarr,i)
     return newlist
 listlistlist = []
 def merge_sort(array, left_index, right_index):
@@ -36,7 +38,7 @@ def merge_sort(array, left_index, right_index):
     merge_sort(array, left_index, middle)
     merge_sort(array, middle + 1, right_index)
     merge(array, left_index, right_index, middle)
-    print(array)
+    # print(array)
     listlistlist.append(array.copy())
 
 
@@ -81,6 +83,16 @@ def merge(array, left_index, right_index, middle):
         array[sorted_index] = right_copy[right_copy_index]
         right_copy_index = right_copy_index + 1
         sorted_index = sorted_index + 1
+@app.route('/sort', methods=['POST'])
+def dosort():
+    print("aaya")
+    if request.method == "POST":
+          arr = []
+          dataArr = request.data.decode('utf-8') 
+          for s in dataArr:
+              if s!=" ":
+                arr.append(int(s))
+          return jsonify({'array': bubbleSort(arr.copy())})
 @app.route('/')
 def index():
     # for array in arrayStates:
@@ -92,8 +104,8 @@ def index():
     arrayStates = listlistlist
     arrayStates = json.dumps(arrayStates)
     data = json.dumps(array)
-    print(data)
-    print(arrayStates)
+    # print(data)
+    # print(arrayStates)
     labels = []
     for i in range(1,len(array)+1):
         labels.append(i)
