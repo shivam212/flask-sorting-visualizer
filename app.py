@@ -26,7 +26,7 @@ def bubbleSort(arr):
             # than the next element 
             if newarr[j] > newarr[j+1] : 
                 newarr[j], newarr[j+1] = newarr[j+1], newarr[j] 
-        newlist.append(newarr.copy())
+            newlist.append(newarr.copy())
         # print(newarr,i)
     return newlist
 listlistlist = []
