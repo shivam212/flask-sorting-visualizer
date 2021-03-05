@@ -8,6 +8,43 @@ bootstrap = Bootstrap(app)
 
 
 # Python program for implementation of Bubble Sort 
+def partition(arr, low, high, mew): 
+    i = (low - 1)         # index of smaller element 
+    pivot = arr[high]     # pivot 
+  
+    for j in range(low, high): 
+  
+        # If current element is smaller  
+        # than or equal to pivot 
+        if arr[j] <= pivot: 
+          
+            # increment index of 
+            # smaller element 
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i] 
+  
+    arr[i + 1], arr[high] = arr[high], arr[i + 1] 
+    mew.append(arr.copy())
+    return (i + 1) 
+  
+# The main function that implements QuickSort 
+# arr[] --> Array to be sorted, 
+# low --> Starting index, 
+# high --> Ending index 
+  
+# Function to do Quick sort 
+def quickSort(arr, low, high, mew): 
+    if low < high: 
+  
+        # pi is partitioning index, arr[p] is now 
+        # at right place 
+        pi = partition(arr, low, high, mew) 
+  
+        # Separately sort elements before 
+        # partition and after partition 
+        quickSort(arr, low, pi-1, mew) 
+        quickSort(arr, pi + 1, high, mew) 
+    return mew
   
 def bubbleSort(arr): 
     newlist = [] 
@@ -115,6 +152,10 @@ def dosort():
           print(str1,str2)
           if str2=="bubble sort":
             return jsonify({'array': bubbleSort(arr.copy())})
+          elif str2=="quick sort":
+              mew = []
+              mew.append(arr.copy())
+              return jsonify({'array': quickSort(arr.copy(),0,len(arr)-1,mew)}) 
           else:
             doit = []
             return jsonify({'array': merge_sort(arr.copy(),0,len(arr)-1,doit)})
