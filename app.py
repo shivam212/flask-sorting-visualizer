@@ -139,5 +139,5 @@ def index():
                         labels=labels, arrayStates = arrayStates)
     # return "yo"
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run()
