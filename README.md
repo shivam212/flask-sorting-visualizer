@@ -12,3 +12,5 @@ python3 app.py
 ```
 
 The site will be up on [https:\\127.0.0.1:5000] . 
+
+Demo is up on https://flask-sorter.herokuapp.com/ 
