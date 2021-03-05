@@ -103,7 +103,7 @@ myLineChart.update()
     const getData = async () => {
     for(var i=0;i<arrayStates.length;i++){
         newarr = arrayStates[i]
-        await new Promise(r => setTimeout(r, 200));
+        await new Promise(r => setTimeout(r, 1000));
         adddata(newarr)
         console.log(i)
     }  } 
